@@ -1,0 +1,67 @@
+# Configuration for the acquired port by the service
+server:
+  port: 8082
+
+# Logging level configuration
+logging:
+  level:
+    root: info
+
+# Health check endpoint configuration
+endpoints:
+  health:
+    enabled: true
+    web:
+      path: health
+
+#management:
+#  security:
+#    enabled: false
+#  health:
+#    binders:
+#      enabled: false
+#    rabbit:
+#      enabled: false
+#  info:
+#    git:
+#      mode: full
+
+# Spring configuration
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: beer
+  application:
+    name: beer-etl
+  cloud:
+    stream:
+      bindings:
+        output:
+          contentType: application/json
+          destination: topic.beer.sql.data
+          binder: rabbit
+        input:
+          destination: queue.beer
+          group: data
+          binder: rabbit
+      binders:
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5671
+                username: admin
+                password: admin
+                virtual-host: dev
+                ssl:
+                  enabled: false
+      rabbit:
+        bindings:
+          output:
+            producer:
+              declareExchange: false
+              routing-key-expression: "'key.beer.data'"

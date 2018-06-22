@@ -1,0 +1,51 @@
+{
+	"rabbit_version": "3.6.14",
+	"users": [{
+		"name": "admin",
+		"password_hash": "dXiGX6xMtnuDC3lbc8xYnKB9tTqhdTj9/HtqQSy9VeWuu1dp",
+		"hashing_algorithm": "rabbit_password_hashing_sha256",
+		"tags": "administrator"
+		}
+	],
+	"vhosts": [{
+		"name": "dev"
+	}],
+	"permissions": [{
+		"user": "admin",
+		"vhost": "dev",
+		"configure": ".*",
+		"write": ".*",
+		"read": ".*"
+	}],
+	"parameters": [],
+	"global_parameters": [{
+		"name": "cluster_name",
+		"value": "rabbit@rabbitmq"
+	}
+	],
+	"policies": [],
+	"queues": [{
+		"name": "queue.beer.sql.data",
+		"vhost": "dev",
+		"durable": true,
+		"auto_delete": false,
+		"arguments": {}
+	}],
+	"exchanges": [{
+		"name": "topic.beer.data",
+		"vhost": "dev",
+		"type": "topic",
+		"durable": true,
+		"auto_delete": false,
+		"internal": false,
+		"arguments": {}
+	}],
+	"bindings" : [{
+		"source": "topic.beer.data",
+		"vhost": "dev",
+		"destination": "queue.beer.data",
+		"destination_type": "queue",
+		"routing_key": "key.beer.data",
+		"arguments": {}
+	}]
+}
