@@ -1,7 +1,6 @@
 package com.scalefocus.beer.etl.domain.sql;
 
 import com.scalefocus.beer.etl.domain.AbstractDomainObject;
-import com.sun.org.apache.xpath.internal.operations.String;
 
 import java.util.Calendar;
 

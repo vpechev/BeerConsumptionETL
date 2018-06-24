@@ -1,8 +1,10 @@
 package com.scalefocus.beer.etl.service;
 
+import com.google.common.collect.Lists;
 import com.scalefocus.beer.etl.domain.mapper.DtoMapper;
 import com.scalefocus.beer.etl.domain.noSql.NoSqlBeerDTO;
 import com.scalefocus.beer.etl.domain.sql.SqlBeerDTO;
+import com.scalefocus.beer.etl.messaging.publisher.RabbitMqPublisher;
 import com.scalefocus.beer.etl.repository.BeerMongoRepository;
 import com.scalefocus.beer.etl.repository.BeerSqlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +21,22 @@ public class BeerService {
     private BeerSqlRepository sqlRepository;
     @Autowired
     private DtoMapper noSqlToSqlDtoMapper;
+    @Autowired
+    private RabbitMqPublisher rabbitMqPublisher;
 
     public void insertToNoSql(List<NoSqlBeerDTO> beerList) {
         List<NoSqlBeerDTO> result = this.mongoRepository.insert(beerList);
-        // publish to RabbitMQ
     }
 
-//    public void insertToNoSql(NoSqlBeerDTO beerDTO) {
-//        NoSqlBeerDTO result = this.mongoRepository.insert(beerDTO);
-//        // publish to RabbitMQ
-//    }
-
-    public void insertToSql(List<SqlBeerDTO> beerList) {
-        this.sqlRepository.saveAll(beerList);
+    public List<SqlBeerDTO> insertToSql(List<SqlBeerDTO> beerList){
+        List<SqlBeerDTO> inserted = Lists.newArrayList(this.sqlRepository.saveAll(beerList));
+        emitBeerList(inserted);
+        return inserted;
     }
 
-
+    public void emitBeerList(List<SqlBeerDTO> beerList) {
+        rabbitMqPublisher.publishToRabbitMq(beerList);
+    }
 
     public List<NoSqlBeerDTO> transformSqlToNoSqlList(List<SqlBeerDTO> beerList) {
         List<NoSqlBeerDTO> resultList = new ArrayList<>();

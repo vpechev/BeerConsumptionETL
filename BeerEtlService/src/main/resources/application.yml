@@ -27,7 +27,19 @@ endpoints:
 #      mode: full
 
 # Spring configuration
+
+
+#spring.jpa.show-sql=true
+#spring.jpa.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+#spring.jpa.hibernate.ddl-auto = create-drop
+
 spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433
+    databaseName: beer
+    username: sa
+    password: My_pa77min8$
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDrivera
   data:
     mongodb:
       host: localhost
