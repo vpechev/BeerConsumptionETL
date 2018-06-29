@@ -1,0 +1,79 @@
+# This compose file will start 2 containers: mongo and mongo-express. Run: sudo docker-compose up
+# mongo: a nosql db, store data in local /opt/data/mongo_home/
+# mongo-express: web UI for mongo listening on 8081. See https://github.com/yeasy/mongo-express
+version: '2.2'
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        hostname: rabbitmq
+        environment:
+            RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+            RABBITMQ_DEFAULT_USER: admin
+            RABBITMQ_DEFAULT_PASS: admin
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - "15672:15672"
+        labels:
+            NAME: "rabbitmq"
+        networks:
+            - beer-etl-network
+
+    mongo:
+        image: mongo:3.6-jessie
+        hostname: mongo
+        restart: always
+        mem_limit: 1024m
+        networks:
+            - beer-etl-network
+
+    mongoexpress:
+        image: mongo-express
+        hostname: mongo-express
+        links:
+            - mongo:mongo
+        ports:
+            - "8081:8081"
+        restart: always
+        mem_limit: 128m
+        environment:
+            - WEB_USER='admin'
+            - WEB_PASS='admin'
+        command: sh -c 'sleep 10 && tini -- node app'
+        networks:
+            - beer-etl-network
+  
+    mssql:
+        image: microsoft/mssql-server-linux
+        hostname: mssql
+        ports:
+          - "1433:1433"
+        environment:
+            ACCEPT_EULA: Y
+            SA_PASSWORD: My_pa77min878
+        networks:
+            - beer-etl-network
+
+    beer-service:
+        image: com.scalefocus.beer/beer-service-docker
+        hostname: beers-service
+        links:
+            - mongo:mongo
+            - rabbitmq:rabbitmq
+            - mssql:mssql
+        depends_on:
+            - mongo
+            - rabbitmq
+            - mssql
+        ports:
+            - 8080:8080
+        restart: always
+        mem_limit: 128m
+        environment:
+            - SPRING_PROFILES_ACTIVE='dev'
+            - JAVA_OPTS= -Xms128m -Xmx256m
+        networks:
+            - beer-etl-network
+
+networks:
+    beer-etl-network:
+        external: false

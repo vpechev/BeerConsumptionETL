@@ -1,15 +1,28 @@
 package com.scalefocus.beer.etl.domain.sql;
 
-import com.scalefocus.beer.etl.domain.AbstractDomainObject;
-
+import javax.persistence.*;
 import java.util.Calendar;
 
-public class SqlBeerDTO extends AbstractDomainObject {
+@Entity
+@Table(name="Beer")
+public class SqlBeerDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String datasetid;
     private String recordid;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
+    @JoinColumn(name="id")
     private FieldsDTO fields;
-    private GeometryDTO geometry;
     private Calendar record_timestamp;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDatasetid() {
         return datasetid;
@@ -33,14 +46,6 @@ public class SqlBeerDTO extends AbstractDomainObject {
 
     public void setFields(FieldsDTO fields) {
         this.fields = fields;
-    }
-
-    public GeometryDTO getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(GeometryDTO geometry) {
-        this.geometry = geometry;
     }
 
     public Calendar getRecord_timestamp() {

@@ -1,26 +1,45 @@
 # BeerETL
 
-## Guide for running rabbitmq container
+## Overview
 
-1. cd ./rabbitmq
-2. Command for building а docker image
+	Simple MapReduce service which main purpose is to transfer data from MsSQL server to MongoDB.
+
+## Data flow
+
+	1. The data is passed to the Spring Boot service through it's REST endpoint: domain_name:8080/beers/_bulk. You can easy operate with it through the exposed [Swagger](https://swagger.io/) endpoint (/swagger-ui.html)
+
+	2. The data is stored to MsSql Server (port 1433 is exposed. You can connect to it through a DB client)
+	
+	3. Data is published to RabbitMq (port 15672 is exposed. This is rabbitmq management console. Credentials: admin/admin) 
+		!!! Note topic/queue is not created
+	
+	4. Published messages are consumed one by one again by the Spring Boot service. 
+	
+	5. Data is transformed
+	
+	6. Data is stored to MongoDB (port 8081 is exposed. This is mongo-express - web based MongoDB client - no authentication is required)
+
+
+## Guide for running the application
+
+1. Build the Spring Boot project and create docker image
 	``` CMD
-	docker build -t rabbitmq_image
-	```
-4. Command for running the docker container:
-	```CMD
-	docker run -d -p 5672:5672 --hostname rabbitmq --name localrabbitmq -p 8080:15672 rabbitmq_image
-	```
-5. You can operate with RabbitMQ through [Management console](http://localhost:8080).
+	gradle build docker -p ./BeerEtlService/
 
-## Guide for running MsSQL container (the container comes from the default image from Dockerhub)
-
-	```CMD
-	docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=my_pass' -p 1433:1433 -d microsoft/mssql-server-linux:2017-latest
+	```
+2. Command for running all the containers through [Docker-compose](https://docs.docker.com/compose/)
+	``` CMD
+	docker-compose up
 	```
 
-## Guide for running a Mongo & Mongo-express containers
+# Technologies
 
-	```CMD
-	 docker-compose up
-	```
+	- Java 8
+	- Spring Boot
+	- MongoDB & Mongo-express
+	- MsSql Server 2017
+	- RabbitMq
+	- Swagger
+	- Docker & Docker-compose
+	- Spring-data
+	- Spring-cloud-stream

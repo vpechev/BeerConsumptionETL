@@ -1,6 +1,7 @@
 package com.scalefocus.beer.etl.messaging.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scalefocus.beer.etl.domain.mapper.DtoMapper;
 import com.scalefocus.beer.etl.domain.noSql.NoSqlBeerDTO;
 import com.scalefocus.beer.etl.domain.sql.SqlBeerDTO;
 import com.scalefocus.beer.etl.service.BeerService;
@@ -9,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class RabbitMqConsumer {
@@ -20,13 +19,16 @@ public class RabbitMqConsumer {
     @Autowired
     private BeerService beerService;
 
-    public void processMessaage(GenericMessage<String> message){
-        String messagePaylod = message.getPayload();
-        try {
-            List<SqlBeerDTO> sqlBeerDTOList = new ObjectMapper().readerFor(SqlBeerDTO.class).readValue(messagePaylod);
-            List<NoSqlBeerDTO> noSqlBeerDTOList = beerService.transformSqlToNoSqlList(sqlBeerDTOList);
+    @Autowired
+    private DtoMapper noSqlToSqlDtoMapper;
 
-            beerService.insertToNoSql(noSqlBeerDTOList);
+    public void processMessage(GenericMessage<String> message){
+        String messagePayload = message.getPayload();
+        try {
+            SqlBeerDTO sqlBeerDTO = new ObjectMapper().readValue(messagePayload, SqlBeerDTO.class);
+            NoSqlBeerDTO noSqlBeerDTO = noSqlToSqlDtoMapper.transformSqlToNoSqlDTO(sqlBeerDTO);
+
+            beerService.insertToNoSql(noSqlBeerDTO);
         } catch (IOException e) {
             e.printStackTrace();
         }

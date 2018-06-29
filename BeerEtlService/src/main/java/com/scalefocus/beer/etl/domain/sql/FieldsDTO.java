@@ -1,9 +1,14 @@
 package com.scalefocus.beer.etl.domain.sql;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.List;
 
+@Entity
+@Table(name="Fields")
 public class FieldsDTO {
+    @Id
+    private int id;
     private String brewery_id;
     private String city;
     private String name;
@@ -11,7 +16,6 @@ public class FieldsDTO {
     private String style_id;
     private String cat_id;
     private String upc;
-    private List<Double> coordinates;
     private String srm;
     private Calendar last_mod;
     private String state;
@@ -20,7 +24,6 @@ public class FieldsDTO {
     private String country;
     private String name_breweries;
     private String address1;
-    private String id;
     private String ibu;
     private String add_user;
 
@@ -78,14 +81,6 @@ public class FieldsDTO {
 
     public void setUpc(String upc) {
         this.upc = upc;
-    }
-
-    public List<Double> getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(List<Double> coordinates) {
-        this.coordinates = coordinates;
     }
 
     public String getSrm() {
@@ -152,11 +147,11 @@ public class FieldsDTO {
         this.address1 = address1;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

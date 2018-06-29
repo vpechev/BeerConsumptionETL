@@ -1,8 +1,10 @@
 package com.scalefocus.beer.etl.domain.noSql;
 
-import com.scalefocus.beer.etl.domain.AbstractDomainObject;
+import org.springframework.data.annotation.Id;
 
-public class NoSqlBeerDTO extends AbstractDomainObject {
+public class NoSqlBeerDTO {
+    @Id
+    private int id;
     private String name;
     private String categoryName;
     private String styleName;
@@ -11,6 +13,14 @@ public class NoSqlBeerDTO extends AbstractDomainObject {
     private String stateName;
     private String city;
     private String street;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

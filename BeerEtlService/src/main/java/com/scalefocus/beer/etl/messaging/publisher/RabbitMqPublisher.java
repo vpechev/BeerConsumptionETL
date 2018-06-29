@@ -33,7 +33,7 @@ public class RabbitMqPublisher {
                 MessageBuilder<String> messageBuilder = MessageBuilder.withPayload(jsonMessage);
                 messageBuilder.setHeader(TYPE_HEADERS_LABEL, TYPE_HEADERS_VALUE);
 
-                return;
+                sourceChannel.output().send(messageBuilder.build());
             } catch(JsonProcessingException e) {
                 LOGGER.error("Error on publishing a beer entity <<<id={}>>> to RabbitMQ. \nStacktrace: ", x.getId(), e);
             }

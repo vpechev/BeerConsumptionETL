@@ -28,6 +28,10 @@ public class BeerService {
         List<NoSqlBeerDTO> result = this.mongoRepository.insert(beerList);
     }
 
+    public void insertToNoSql(NoSqlBeerDTO beerDto) {
+        NoSqlBeerDTO result = this.mongoRepository.insert(beerDto);
+    }
+
     public List<SqlBeerDTO> insertToSql(List<SqlBeerDTO> beerList){
         List<SqlBeerDTO> inserted = Lists.newArrayList(this.sqlRepository.saveAll(beerList));
         emitBeerList(inserted);
@@ -38,11 +42,11 @@ public class BeerService {
         rabbitMqPublisher.publishToRabbitMq(beerList);
     }
 
-    public List<NoSqlBeerDTO> transformSqlToNoSqlList(List<SqlBeerDTO> beerList) {
-        List<NoSqlBeerDTO> resultList = new ArrayList<>();
-
-        beerList.forEach(x -> resultList.add(noSqlToSqlDtoMapper.transformSqlToNoSqlDTO(x)));
-
-        return resultList;
-    }
+//    public List<NoSqlBeerDTO> transformSqlToNoSqlList(List<SqlBeerDTO> beerList) {
+//        List<NoSqlBeerDTO> resultList = new ArrayList<>();
+//
+//        beerList.forEach(x -> resultList.add(noSqlToSqlDtoMapper.transformSqlToNoSqlDTO(x)));
+//
+//        return resultList;
+//    }
 }

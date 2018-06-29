@@ -16,6 +16,6 @@ public class ConsumerConfiguration {
 
     @StreamListener(Sink.INPUT)
     public void consumeMessage(GenericMessage<String> message){
-        rabbitMqConsumer.processMessaage(message);
+        rabbitMqConsumer.processMessage(message);
     }
 }
