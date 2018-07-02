@@ -4,7 +4,8 @@
 version: '2.2'
 services:
     rabbitmq:
-        image: rabbitmq:3-management
+        # build: ./rabbitmq/
+        image: cdcaff099abc
         hostname: rabbitmq
         environment:
             RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
@@ -12,6 +13,7 @@ services:
             RABBITMQ_DEFAULT_PASS: admin
             RABBITMQ_DEFAULT_VHOST: "/"
         ports:
+            - "5671:5672"
             - "15672:15672"
         labels:
             NAME: "rabbitmq"
@@ -23,6 +25,8 @@ services:
         hostname: mongo
         restart: always
         mem_limit: 1024m
+        ports:
+            - "27017:27017"
         networks:
             - beer-etl-network
 
@@ -42,6 +46,15 @@ services:
         networks:
             - beer-etl-network
   
+    # mariadb:
+    #     image: 'bitnami/mariadb:latest'
+    #     environment:
+    #         - ALLOW_EMPTY_PASSWORD=yes
+    #     ports:
+    #         - '3306:3306'
+    #     networks:
+    #         - beer-etl-network
+    
     mssql:
         image: microsoft/mssql-server-linux
         hostname: mssql

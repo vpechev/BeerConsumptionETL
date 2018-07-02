@@ -25,14 +25,14 @@
 	],
 	"policies": [],
 	"queues": [{
-		"name": "queue.beer.sql.data",
+		"name": "queue.beer.data",
 		"vhost": "dev",
 		"durable": true,
 		"auto_delete": false,
 		"arguments": {}
 	}],
 	"exchanges": [{
-		"name": "topic.beer.data",
+		"name": "topic.beer.sql.data",
 		"vhost": "dev",
 		"type": "topic",
 		"durable": true,
@@ -41,7 +41,7 @@
 		"arguments": {}
 	}],
 	"bindings" : [{
-		"source": "topic.beer.data",
+		"source": "topic.beer.sql.data",
 		"vhost": "dev",
 		"destination": "queue.beer.data",
 		"destination_type": "queue",

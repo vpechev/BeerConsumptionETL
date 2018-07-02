@@ -1,6 +1,6 @@
 # Configuration for the acquired port by the service
 server:
-  port: 8080
+  port: 8082
 
 # Logging level configuration
 logging:
@@ -35,7 +35,7 @@ endpoints:
 
 spring:
   datasource:
-    url: jdbc:sqlserver://mssql:1433
+    url: jdbc:sqlserver://localhost:1433
     databaseName: Beer
     username: sa
     password: My_pa77min878
@@ -55,12 +55,11 @@ spring:
                   auto: update
   data:
     mongodb:
-      host: mongo
+      host: localhost
       port: 27017
       database: beer
   application:
     name: beer-etl
-  profiles: dev
   cloud:
     stream:
       bindings:
@@ -78,11 +77,11 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: rabbitmq
-                port: 5672
+                host: localhost
+                port: 5671
                 username: admin
                 password: admin
-                virtual-host: dev
+                virtual-host: /
                 ssl:
                   enabled: false
       rabbit:
