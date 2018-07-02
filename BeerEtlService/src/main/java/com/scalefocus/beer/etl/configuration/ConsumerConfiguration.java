@@ -14,6 +14,11 @@ public class ConsumerConfiguration {
     @Autowired
     private RabbitMqConsumer rabbitMqConsumer;
 
+    /**
+     * Setup input channel from RabbitMq which consumes messages from the configured queue
+     * (this which correspond to the Sink configuration in applications.yml)
+     * @param message - the consumed message from RabbitMq with payload type - String
+     */
     @StreamListener(Sink.INPUT)
     public void consumeMessage(GenericMessage<String> message){
         rabbitMqConsumer.processMessage(message);

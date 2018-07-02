@@ -23,7 +23,11 @@ public class RabbitMqPublisher {
     @Autowired
     private Source sourceChannel;
 
-    //it is better to make this method async
+    //TODO it is better to make this method async
+    /**
+     * Itterate the passed list of objects and publish everyone of them to RabbitMq
+     * @param beersList - the list which
+     */
     public void publishToRabbitMq(List<SqlBeerDTO> beersList){
         ObjectMapper objectMapper = new ObjectMapper();
 

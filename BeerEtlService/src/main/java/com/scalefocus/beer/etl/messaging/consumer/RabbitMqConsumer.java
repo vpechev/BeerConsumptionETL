@@ -22,6 +22,10 @@ public class RabbitMqConsumer {
     @Autowired
     private DtoMapper noSqlToSqlDtoMapper;
 
+    /**
+     * Process consumes messages from RabbitMq
+     * @param message - the message which is consumed from RabbitMq
+     */
     public void processMessage(GenericMessage<String> message){
         String messagePayload = message.getPayload();
         try {

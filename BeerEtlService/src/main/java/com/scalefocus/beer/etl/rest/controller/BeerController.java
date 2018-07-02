@@ -21,13 +21,13 @@ public class BeerController {
     @Autowired
     private BeerService service;
 
-//    @PostMapping
-//    public void insertInNoSQLDb(NoSqlBeerDTO beerDTO){
-//        this.service.insertToNoSql(beerDTO);
-//    }
-
+    /**
+     * Call the service layer in order to process the passed list
+     * @param beerList
+     */
     @PostMapping("/_bulk")
-    public void insertInSQLDb(@RequestBody List<SqlBeerDTO> beerList){
+    public void insertInSql(@RequestBody List<SqlBeerDTO> beerList){
+        LOGGER.debug("New list with {} entities received for processing.", beerList.size());
         this.service.insertToSql(beerList);
     }
 }

@@ -6,8 +6,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DtoMapper {
+    //TODO could be replaced from some library. E.g. MapStruct
+    /**
+     * Maps the parameter object to the type of the result object
+     * @param noSqlBeerDTO
+     * @return
+     */
     public NoSqlBeerDTO transformSqlToNoSqlDTO(SqlBeerDTO noSqlBeerDTO) {
         NoSqlBeerDTO result = new NoSqlBeerDTO();
+
         result.setId(noSqlBeerDTO.getId());
         result.setName(noSqlBeerDTO.getFields().getName());
         result.setCategoryName(noSqlBeerDTO.getFields().getCat_name());
@@ -17,7 +24,6 @@ public class DtoMapper {
         result.setStateName(noSqlBeerDTO.getFields().getState());
         result.setCity(noSqlBeerDTO.getFields().getCity());
         result.setStreet(noSqlBeerDTO.getFields().getAddress1());
-
 
         return result;
     }
