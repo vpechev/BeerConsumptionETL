@@ -81,7 +81,7 @@ spring:
                 port: 5671
                 username: admin
                 password: admin
-                virtual-host: /
+                virtual-host: dev
                 ssl:
                   enabled: false
       rabbit:

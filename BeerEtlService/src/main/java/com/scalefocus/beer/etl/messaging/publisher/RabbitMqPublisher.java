@@ -32,15 +32,23 @@ public class RabbitMqPublisher {
         ObjectMapper objectMapper = new ObjectMapper();
 
         beersList.forEach(x->{
-            try {
-                String jsonMessage = objectMapper.writeValueAsString(x);
-                MessageBuilder<String> messageBuilder = MessageBuilder.withPayload(jsonMessage);
-                messageBuilder.setHeader(TYPE_HEADERS_LABEL, TYPE_HEADERS_VALUE);
-
-                sourceChannel.output().send(messageBuilder.build());
-            } catch(JsonProcessingException e) {
-                LOGGER.error("Error on publishing a beer entity <<<id={}>>> to RabbitMQ. \nStacktrace: ", x.getId(), e);
-            }
+            publishToRabbitMq(x);
         });
+    }
+
+    public void publishToRabbitMq(SqlBeerDTO sqlBeerDTO){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String jsonMessage = objectMapper.writeValueAsString(sqlBeerDTO);
+            MessageBuilder<String> messageBuilder = MessageBuilder.withPayload(jsonMessage);
+            messageBuilder.setHeader(TYPE_HEADERS_LABEL, TYPE_HEADERS_VALUE);
+
+            sourceChannel.output().send(messageBuilder.build());
+
+            LOGGER.debug("Entity with id {} inserted to SQL", sqlBeerDTO.getId());
+        } catch(JsonProcessingException e) {
+            LOGGER.error("Error on publishing a beer entity <<<id={}>>> to RabbitMQ. \nStacktrace: ", sqlBeerDTO.getId(), e);
+        }
     }
 }
