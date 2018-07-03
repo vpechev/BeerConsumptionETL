@@ -7,7 +7,9 @@ import com.scalefocus.beer.etl.repository.BeerMongoRepository;
 import com.scalefocus.beer.etl.repository.BeerSqlRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,8 +19,9 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class BeerServiceTest {
     @MockBean
     private BeerMongoRepository mockMongoRepository;
@@ -34,7 +37,7 @@ public class BeerServiceTest {
 
     @Test
     public void insertToNoSql_WithList_ShouldCall_Repo_Test() {
-        doNothing().when(mockMongoRepository.insert(anyList()));
+        when(mockMongoRepository.insert(anyList())).thenReturn(null);
 
         subject.insertToNoSql(new ArrayList<>());
 
@@ -43,7 +46,7 @@ public class BeerServiceTest {
 
     @Test
     public void insertToNoSql_WithSingleObject_ShouldCall_Repo_Test() {
-        doNothing().when(mockMongoRepository.insert(anyList()));
+        when(mockMongoRepository.insert(anyList())).thenReturn(null);
 
         subject.insertToNoSql(new NoSqlBeerDTO());
 
@@ -52,7 +55,8 @@ public class BeerServiceTest {
 
     @Test
     public void insertToSql_ShouldCall_Repo_Test() {
-        doNothing().when(mockSqlRepository.saveAll(anyList()));
+        when(mockSqlRepository.saveAll(anyList())).thenReturn(new ArrayList<>());
+        doNothing().when(mockRabbitMqPublisher).publishToRabbitMq(anyList());
 
         subject.insertToSql(new ArrayList<>());
 
