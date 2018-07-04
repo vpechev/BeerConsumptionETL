@@ -35,7 +35,7 @@ endpoints:
 
 spring:
   datasource:
-    url: jdbc:sqlserver://mssql:1433
+    url: jdbc:sqlserver://172.26.81.113:1433
     databaseName: Beer
     username: sa
     password: My_pa77min878
@@ -55,12 +55,11 @@ spring:
                   auto: update
   data:
     mongodb:
-      host: mongo
+      host: 172.26.81.113
       port: 27017
       database: beer
   application:
     name: beer-etl
-  profiles: dev
   cloud:
     stream:
       bindings:
@@ -78,8 +77,8 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: rabbitmq
-                port: 5672
+                host: 172.26.81.113
+                port: 5671
                 username: admin
                 password: admin
                 virtual-host: dev

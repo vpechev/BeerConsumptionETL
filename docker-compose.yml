@@ -11,7 +11,8 @@ services:
             RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
             RABBITMQ_DEFAULT_USER: admin
             RABBITMQ_DEFAULT_PASS: admin
-            RABBITMQ_DEFAULT_VHOST: "/"
+            RABBITMQ_DEFAULT_VHOST: "dev"
+            RABBITMQ_ADVANCED_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
         ports:
             - "5671:5672"
             - "15672:15672"
@@ -66,26 +67,26 @@ services:
         networks:
             - beer-etl-network
 
-    # beer-service:
-    #     image: com.scalefocus.beer/beer-service-docker
-    #     hostname: beers-service
-    #     links:
-    #         - mongo:mongo
-    #         - rabbitmq:rabbitmq
-    #         - mssql:mssql
-    #     depends_on:
-    #         - mongo
-    #         - rabbitmq
-    #         - mssql
-    #     ports:
-    #         - 8080:8080
-    #     restart: always
-    #     mem_limit: 128m
-    #     environment:
-    #         - SPRING_PROFILES_ACTIVE='dev'
-    #         - JAVA_OPTS= -Xms128m -Xmx256m
-    #     networks:
-    #         - beer-etl-network
+    beer-service:
+        image: com.scalefocus.beer/beer-service-docker
+        hostname: beers-service
+        links:
+            - mongo:mongo
+            - rabbitmq:rabbitmq
+            - mssql:mssql
+        depends_on:
+            - mongo
+            - rabbitmq
+            - mssql
+        ports:
+            - 8080:8080
+        restart: always
+        mem_limit: 1024m
+        environment:
+            - SPRING_PROFILES_ACTIVE='dev'
+            - JAVA_OPTS= -Xms128m -Xmx256m
+        networks:
+            - beer-etl-network
 
 networks:
     beer-etl-network:
