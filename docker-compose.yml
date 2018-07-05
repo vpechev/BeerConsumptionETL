@@ -3,10 +3,9 @@
 # mongo-express: web UI for mongo listening on 8081. See https://github.com/yeasy/mongo-express
 version: '2.2'
 services:
-    rabbitmq:
+    rabbitmq-cluster:
         build: ./rabbitmq/
-        # image: cdcaff099abc
-        hostname: rabbitmq
+        hostname: rabbitmq-cluster
         environment:
             RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
             RABBITMQ_DEFAULT_USER: admin
@@ -15,9 +14,9 @@ services:
             RABBITMQ_ADVANCED_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
         ports:
             - "5671:5672"
-            - "15672:15672"
+            - "15671:15672"
         labels:
-            NAME: "rabbitmq"
+            NAME: "rabbitmq-cluster"
         networks:
             - beer-etl-network
 
@@ -72,11 +71,11 @@ services:
         hostname: beers-service
         links:
             - mongo:mongo
-            - rabbitmq:rabbitmq
+            - rabbitmq-cluster:rabbitmq-cluster
             - mssql:mssql
         depends_on:
             - mongo
-            - rabbitmq
+            - rabbitmq-cluster
             - mssql
         ports:
             - 8080:8080

@@ -6,18 +6,19 @@
 
 ## Data flow
 
-	1. The data is passed to the Spring Boot service through it's REST endpoint: domain_name:8080/beers/_bulk. You can easy operate with it through the exposed [Swagger](https://swagger.io/) endpoint (/swagger-ui.html)
+1. The data is passed to the Spring Boot service through it's REST endpoint: domain_name:8080/beers/_bulk. You can easy operate with it through the exposed [Swagger](https://swagger.io/) endpoint (/swagger-ui.html)
 
-	2. The data is stored to MsSql Server (port 1433 is exposed. You can connect to it through a DB client)
+2. The data is stored to MsSql Server (port 1433 is exposed. You can connect to it through a DB client)
 	
-	3. Data is published to RabbitMq (port 15672 is exposed. This is rabbitmq management console. Credentials: admin/admin) 
-		!!! Note topic/queue is not created
+3. Data is published to RabbitMq (port 15671 is exposed. This is rabbitmq management console. Credentials: admin/admin) 
+	- **Exchange**: topic.beer.sql.data
+	- **Queue**: queue.beer.data
 	
-	4. Published messages are consumed one by one again by the Spring Boot service. 
+4. Published messages are consumed one by one again by the Spring Boot service. 
 	
-	5. Data is transformed
+5. Data is transformed
 	
-	6. Data is stored to MongoDB (port 8081 is exposed. This is mongo-express - web based MongoDB client - no authentication is required)
+6. Data is stored to MongoDB (port 8081 is exposed. This is mongo-express - web based MongoDB client - no authentication is required)
 
 
 ## Guide for running the application
@@ -25,14 +26,18 @@
 1. Build the Spring Boot project and create docker image
 	``` CMD
 	gradle build docker -p ./BeerEtlService/
-
 	```
 2. Command for running all the containers through [Docker-compose](https://docs.docker.com/compose/)
 	``` CMD
 	docker-compose up
 	```
 
-# Technologies
+## Sample test data
+
+1. A sample test data could be downloaded from [Open data soft](https://data.opendatasoft.com/explore/dataset/open-beer-database%40public-us/export/?dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6Im9wZW4tYmVlci1kYXRhYmFzZUBwdWJsaWMtdXMiLCJvcHRpb25zIjp7fX0sImNoYXJ0cyI6W3sidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJhYnYiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMkMzRjU2In1dLCJ4QXhpcyI6Imxhc3RfbW9kIiwibWF4cG9pbnRzIjoiIiwidGltZXNjYWxlIjoieWVhciIsInNvcnQiOiIifV0sImRpc3BsYXlMZWdlbmQiOnRydWV9&location=2,16.98232,9.498&basemap=mapbox.light)
+2. A local file could be used "./sampleDate/open-beer-database.json"
+
+## Technologies
 
 	- Java 8
 	- Spring Boot
