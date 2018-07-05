@@ -77,7 +77,7 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: rabbitmq-cluster
+                host: 172.26.81.113 
                 port: 5671
                 username: admin
                 password: admin
