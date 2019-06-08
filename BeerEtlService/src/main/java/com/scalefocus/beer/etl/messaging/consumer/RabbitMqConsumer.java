@@ -2,7 +2,6 @@ package com.scalefocus.beer.etl.messaging.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalefocus.beer.etl.domain.mapper.DtoMapper;
-import com.scalefocus.beer.etl.domain.noSql.NoSqlBeerDTO;
 import com.scalefocus.beer.etl.domain.sql.SqlBeerDTO;
 import com.scalefocus.beer.etl.service.BeerService;
 import org.slf4j.Logger;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 
 @Service
@@ -29,8 +29,10 @@ public class RabbitMqConsumer {
     public void processMessage(GenericMessage<String> message){
         String messagePayload = message.getPayload();
         try {
-            SqlBeerDTO sqlBeerDTO = new ObjectMapper().readValue(messagePayload, SqlBeerDTO.class);
-            NoSqlBeerDTO noSqlBeerDTO = noSqlToSqlDtoMapper.transformSqlToNoSqlDTO(sqlBeerDTO);
+            LOGGER.debug("New message consumed");
+
+            var sqlBeerDTO = new ObjectMapper().readValue(messagePayload, SqlBeerDTO.class);
+            var noSqlBeerDTO = noSqlToSqlDtoMapper.mapSqlToNoSqlDTO(sqlBeerDTO);
 
             beerService.insertToNoSql(noSqlBeerDTO);
         } catch (IOException e) {

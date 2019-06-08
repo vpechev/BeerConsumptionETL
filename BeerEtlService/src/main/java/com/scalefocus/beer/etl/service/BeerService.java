@@ -1,6 +1,5 @@
 package com.scalefocus.beer.etl.service;
 
-import com.google.common.collect.Lists;
 import com.scalefocus.beer.etl.domain.mapper.DtoMapper;
 import com.scalefocus.beer.etl.domain.noSql.NoSqlBeerDTO;
 import com.scalefocus.beer.etl.domain.sql.SqlBeerDTO;
@@ -9,7 +8,6 @@ import com.scalefocus.beer.etl.exception.StoreToSqlException;
 import com.scalefocus.beer.etl.messaging.publisher.RabbitMqPublisher;
 import com.scalefocus.beer.etl.repository.BeerMongoRepository;
 import com.scalefocus.beer.etl.repository.BeerSqlRepository;
-import com.scalefocus.beer.etl.rest.controller.BeerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class BeerService {
      * @param beerList - list of NoSqlBeerDTO objects
      */
     public void insertToNoSql(List<NoSqlBeerDTO> beerList) {
-        List<NoSqlBeerDTO> result = this.mongoRepository.insert(beerList);
+        this.mongoRepository.insert(beerList);
     }
 
     /**
@@ -45,7 +43,7 @@ public class BeerService {
      * @param beerDto - SqlBeerDTO object
      */
     public void insertToNoSql(NoSqlBeerDTO beerDto) {
-        NoSqlBeerDTO result = this.mongoRepository.insert(beerDto);
+        var result = this.mongoRepository.insert(beerDto);
         LOGGER.debug("Entity with id {} inserted to NoSQL", result.getId());
     }
 
@@ -54,16 +52,17 @@ public class BeerService {
      * @param beerList - list of SqlBeerDTO objects
      */
     public List<SqlBeerDTO> insertToSql(List<SqlBeerDTO> beerList){
-        List<SqlBeerDTO> insertedList = new ArrayList<>();
+        var insertedList = new ArrayList<SqlBeerDTO>();
 
         beerList.forEach(x-> {
             try {
                 if (!this.sqlRepository.existsById(x.getId())) {
-                    SqlBeerDTO inserted = this.sqlRepository.save(x);
+                    var inserted = this.sqlRepository.save(x);
                     LOGGER.debug("Entity with id {} inserted to SQL", inserted.getId());
                     insertedList.add(inserted);
 
                     emitBeerDto(inserted);
+
                     //We sleep the thread in order to increase the interval and show in the RabbitMq console, that a lot of messages goes through.
                     Thread.sleep(750);
                 }

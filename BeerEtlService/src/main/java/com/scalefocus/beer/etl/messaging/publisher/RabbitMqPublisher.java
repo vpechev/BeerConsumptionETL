@@ -17,6 +17,7 @@ import java.util.List;
 @EnableBinding(Source.class)
 public class RabbitMqPublisher {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMqPublisher.class);
+
     private final String TYPE_HEADERS_LABEL = "type";
     private final String TYPE_HEADERS_VALUE = "NoSqlBeerEntity";
 
@@ -29,15 +30,13 @@ public class RabbitMqPublisher {
      * @param beersList - the list which
      */
     public void publishToRabbitMq(List<SqlBeerDTO> beersList){
-        ObjectMapper objectMapper = new ObjectMapper();
-
         beersList.forEach(x->{
             publishToRabbitMq(x);
         });
     }
 
     public void publishToRabbitMq(SqlBeerDTO sqlBeerDTO){
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
 
         try {
             String jsonMessage = objectMapper.writeValueAsString(sqlBeerDTO);

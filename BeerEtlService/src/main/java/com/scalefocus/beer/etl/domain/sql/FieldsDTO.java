@@ -1,30 +1,50 @@
 package com.scalefocus.beer.etl.domain.sql;
 
-import javax.persistence.*;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Calendar;
-import java.util.List;
 
 @Entity
 @Table(name="Fields")
 public class FieldsDTO {
     @Id
     private int id;
+    @ApiModelProperty(example = "69")
     private String brewery_id;
+    @ApiModelProperty(example = "Lovech")
     private String city;
+    @ApiModelProperty(example = "Mr. X")
     private String name;
+    @ApiModelProperty(example = "Other")
     private String cat_name;
+    @ApiModelProperty(example = "69")
     private String style_id;
+    @ApiModelProperty(example = "10")
     private String cat_id;
+    @ApiModelProperty(example = "0")
     private String upc;
+    @ApiModelProperty(example = "0")
     private String srm;
+    @ApiModelProperty(example = "2019-06-08T23:00:00+03:00")
     private Calendar last_mod;
+    @ApiModelProperty(example = "Lovech")
     private String state;
+    @ApiModelProperty(example = "Lovech Pilsen-Hefeweizen")
     private String style_name;
+    @ApiModelProperty(example = "0.0")
     private double abv;
+    @ApiModelProperty(example = "Bulgaria")
     private String country;
+    @ApiModelProperty(example = "Meltum")
     private String name_breweries;
+    @ApiModelProperty(example = "Presyaka village")
     private String address1;
+    @ApiModelProperty(example = "0")
     private String ibu;
+    @ApiModelProperty(example = "Pavlio")
     private String add_user;
 
     public String getBrewery_id() {
