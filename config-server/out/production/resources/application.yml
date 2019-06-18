@@ -1,0 +1,15 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+      config:
+        server:
+          git:
+            uri: file:///C:/Projects/BeerETL/configuration-repository/
+            clone-on-start: true
+
+#security:
+#  user:
+#    name: vladkata
+#    password: m3GaQka7aPa33w0rd
