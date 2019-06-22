@@ -30,6 +30,11 @@ hs_err_pid*
 /BeerEtlService/build/
 /BeerEtlService/!gradle/wrapper/gradle-wrapper.jar
 
+# config-server
+/config-server/.gradle
+/config-server/build/
+/config-server/!gradle/wrapper/gradle-wrapper.jar
+
 ### IntelliJ IDEA ###
 /BeerEtlService.idea
 /BeerEtlService*.iws

@@ -3,20 +3,16 @@
 # mongo-express: web UI for mongo listening on 8081. See https://github.com/yeasy/mongo-express
 version: '2.2'
 services:
-    rabbitmq-cluster:
-        build: ./rabbitmq/
-        hostname: rabbitmq-cluster
-        environment:
-            RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
-            RABBITMQ_DEFAULT_USER: admin
-            RABBITMQ_DEFAULT_PASS: admin
-            RABBITMQ_DEFAULT_VHOST: "dev"
-            RABBITMQ_ADVANCED_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
+    mssql:
+        image: microsoft/mssql-server-linux
+        hostname: mssql
         ports:
-            - "5671:5672"
-            - "15671:15672"
-        labels:
-            NAME: "rabbitmq-cluster"
+          - "1433:1433"
+        environment:
+            ACCEPT_EULA: Y
+            SA_PASSWORD: My_pa77min878
+        volumes:
+            - ./mssql:/var/lib/mssql
         networks:
             - beer-etl-network
 
@@ -45,35 +41,72 @@ services:
         command: sh -c 'sleep 10 && tini -- node app'
         networks:
             - beer-etl-network
-  
-    # mariadb:
-    #     image: 'bitnami/mariadb:latest'
-    #     environment:
-    #         - ALLOW_EMPTY_PASSWORD=yes
-    #     ports:
-    #         - '3306:3306'
-    #     networks:
-    #         - beer-etl-network
-    
-    mssql:
-        image: microsoft/mssql-server-linux
-        hostname: mssql
-        ports:
-          - "1433:1433"
+
+    rabbitmq-cluster:
+        build: ./rabbitmq/
+        hostname: rabbitmq-cluster
         environment:
-            ACCEPT_EULA: Y
-            SA_PASSWORD: My_pa77min878
+            RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+            RABBITMQ_DEFAULT_USER: admin
+            RABBITMQ_DEFAULT_PASS: admin
+            RABBITMQ_DEFAULT_VHOST: "dev"
+            RABBITMQ_ADVANCED_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
+        ports:
+            - "5671:5672"
+            - "15671:15672"
+        labels:
+            NAME: "rabbitmq-cluster"
         networks:
             - beer-etl-network
+
+    # internal-git:
+    #     image: gitea/gitea:latest
+    #     restart: always
+    #     depends_on:
+    #         - mssql
+    #     volumes:
+    #         - ./mssql:/data
+    #     ports:
+    #         - "3000:3000"
+    #         - "222:22"
+    #     networks:
+    #         - beer-etl-network
+
+    config-server:
+        image: com.scalefocus.beer/config-server
+        hostname: config-server
+        ports: 
+            - "8888:8888"
+        restart: always
+        mem_limit: 1024m
+        environment:
+            - SPRING_PROFILES_ACTIVE='dev'
+            - JAVA_OPTS= -Xms128m -Xmx256m
+        volumes:
+            - C:\Projects\BeerETL\configuration-repository:/configuration-repository
+        networks:
+            - beer-etl-network
+  
+    # # mariadb:
+    # #     image: 'bitnami/mariadb:latest'
+    # #     environment:
+    # #         - ALLOW_EMPTY_PASSWORD=yes
+    # #     ports:
+    # #         - '3306:3306'
+    # #     networks:
+    # #         - beer-etl-network
+    
 
     beer-service:
         image: com.scalefocus.beer/beer-service-docker
         hostname: beers-service
         links:
+            - config-server:config-server
             - mongo:mongo
             - rabbitmq-cluster:rabbitmq-cluster
             - mssql:mssql
         depends_on:
+            - config-server
             - mongo
             - rabbitmq-cluster
             - mssql
