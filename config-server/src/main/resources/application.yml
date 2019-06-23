@@ -2,15 +2,21 @@ server:
   port: 8888
 
 spring:
+  provfiles:
+    active: native
   cloud:
-      config:
-        server:
-          git:
-            uri: file://configuration-repository/
-#            uri: file://C:/Projects/BeerETL/configuration-repository/
-            clone-on-start: true
+    config:
+      server:
+#        bootstrap: true
+#        native:
+#          searchLocations: file://configuration-repository
+        git:
+          uri: file://configuration-repository
+#         uri: file://C:/Projects/BeerETL/configuration-repository
+          clone-on-start: true
+          force-pull: true
 
-#security:
-#  user:
-#    name: vladkata
-#    password: m3GaQka7aPa33w0  rd
+security:
+  user:
+    name: vladkata
+    password: m3GaQka7aPa33w0rd

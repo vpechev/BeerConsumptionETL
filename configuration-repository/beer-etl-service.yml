@@ -34,6 +34,8 @@ endpoints:
 #spring.jpa.hibernate.ddl-auto = create-drop
 
 spring:
+  profiles:
+    active: dev
   datasource:
     url: jdbc:sqlserver://mssql:1433
     databaseName: Beer

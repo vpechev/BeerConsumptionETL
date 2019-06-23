@@ -6,7 +6,7 @@ Simple MapReduce service which main purpose is to transfer data from MsSQL serve
 
 ## Data flow
 
-1. The data is passed to the Spring Boot service through it's REST endpoint: domain_name:8080/beers/_bulk. You can easy operate with it through the exposed [Swagger](https://swagger.io/) endpoint (/swagger-ui.html)
+1. The data is passed to Spring Boot service through it's REST endpoint: `domain_name:8080/beers/_bulk`. You can easy operate with it through the exposed [Swagger](https://swagger.io/) endpoint.
 
 2. The data is stored to MsSql Server (port 1433 is exposed. You can connect to it through a DB client)
 	
@@ -24,19 +24,21 @@ Simple MapReduce service which main purpose is to transfer data from MsSQL serve
 ## Guide for running the application
 
 1. Build the Spring Boot project and create docker image
-	``` CMD
+	``` cmd
 	gradle build docker -p ./BeerEtlService/
 	gradle build docker -p ./config-server/
 	```
 2. Command for running all the containers through [Docker-compose](https://docs.docker.com/compose/)
-	``` CMD
+	``` cmd
 	docker-compose up
 	```
+
+**Note: the endpoints above are exposed for testing purposes. Please disable in PROD**
 
 ## Sample test data
 
 1. A sample test data could be downloaded from [Open data soft](https://data.opendatasoft.com/explore/dataset/open-beer-database%40public-us/export/?dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6Im9wZW4tYmVlci1kYXRhYmFzZUBwdWJsaWMtdXMiLCJvcHRpb25zIjp7fX0sImNoYXJ0cyI6W3sidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJhYnYiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMkMzRjU2In1dLCJ4QXhpcyI6Imxhc3RfbW9kIiwibWF4cG9pbnRzIjoiIiwidGltZXNjYWxlIjoieWVhciIsInNvcnQiOiIifV0sImRpc3BsYXlMZWdlbmQiOnRydWV9&location=2,16.98232,9.498&basemap=mapbox.light)
-2. A local file could be used "./sampleDate/open-beer-database.json"
+2. A local copy could be used "./sampleDate/open-beer-database.json"
 
 ## Additional technical details
 
@@ -57,7 +59,6 @@ docker-compose up -d client
 ``` cmd
 docker-compose logs
 ```
-
 
 ## Technologies
 

@@ -1,10 +1,3 @@
-#spring:
-#  cloud:
-#    config:
-#      uri: http://config-server:8888
-#      username: vladkata
-#      passwor: m3GaQka7aPa33w0rd
-
 # Configuration for the acquired port by the service
 server:
   port: 8080
@@ -41,6 +34,8 @@ endpoints:
 #spring.jpa.hibernate.ddl-auto = create-drop
 
 spring:
+  profiles:
+    active: dev
   datasource:
     url: jdbc:sqlserver://mssql:1433
     databaseName: Beer
@@ -52,14 +47,14 @@ spring:
       enabled: true
     database: SQL_SERVER
     hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.SQLServer2012Dialect
-          hbm2ddl:
-            auto: update
+        ddl-auto: update
+        naming:
+            physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.SQLServer2012Dialect
+                hbm2ddl:
+                  auto: update
   data:
     mongodb:
       host: mongo

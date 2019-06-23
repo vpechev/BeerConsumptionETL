@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: beer-etl-service
+  active:
+    profiles: dev
+  cloud:
+    enabled: true
+    config:
+      uri: http://config-server:8888
+      failFast: true
+      retry:
+        maxAttempts: 20

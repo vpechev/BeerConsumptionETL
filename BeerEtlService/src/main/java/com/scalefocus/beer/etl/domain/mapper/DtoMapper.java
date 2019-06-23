@@ -4,8 +4,10 @@ import com.scalefocus.beer.etl.domain.noSql.NoSqlBeerDTO;
 import com.scalefocus.beer.etl.domain.sql.SqlBeerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface DtoMapper {
     /**
      * Maps the parameter object to the type of the result object
